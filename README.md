@@ -1,17 +1,38 @@
-# deaf
+# SpeakEasy ISL — Speech-to-Avatar Prototype
 
-A new Flutter project.
+SpeakEasy ISL is a Flutter application and Python backend prototype exploring a path from spoken input to Indian Sign Language (ISL) gloss and a visual pose sequence.
 
-## Getting Started
+## Processing flow
 
-This project is a starting point for a Flutter application.
+Audio recording → speech transcription (Whisper) → ISL gloss generation → pose/keypoint sequence → Flutter avatar visualization.
 
-A few resources to get you started if this is your first Flutter project:
+## Main components
+- **Flutter app:** records audio, sends it to the backend, and displays the response/animated skeleton.
+- **FastAPI backend:** exposes `/speech`, `/gloss`, `/pose`, and `/pipeline` endpoints.
+- **Model wrappers:** gloss and pose model loaders are under `backend/models/`.
+- **Setup guide:** [SETUP.md](SETUP.md) explains dependency installation, model-weight setup, backend URLs, and troubleshooting.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Run the Flutter app
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Install Flutter and the Android SDK, then run from the repository root:
+
+~~~bash
+flutter pub get
+flutter run
+~~~
+
+## Run the backend
+
+~~~bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+~~~
+
+Check `http://localhost:8000/health` and follow [SETUP.md](SETUP.md) to prepare the model weights and point the app at the backend.
+
+## Tech stack
+Flutter · Dart · FastAPI · Python · Whisper · PyTorch model wrappers · HTTP/audio recording
+
+## Status and limitations
+Review the model setup instructions carefully: model weights and architecture-specific loading may need to be configured before real inference works. Treat generated gloss/pose as an accessibility prototype, not a validated substitute for a fluent ISL interpreter.
